@@ -1,4 +1,4 @@
-ppx_here
+ppx_here (Bazel edition)
 ========
 
 A ppx rewriter that defines an extension node whose value is its source position.
