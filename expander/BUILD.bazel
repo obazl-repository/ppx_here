@@ -1,0 +1,36 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_ocaml//build:rules.bzl",
+     "ocaml_library",
+     "ppx_module",
+     "ocaml_signature",
+)
+
+DEPS_1 = [
+    "@base//lib/base",
+    "@ppxlib//lib/ppxlib"
+]
+
+############################# Aggregates #############################
+ocaml_library(
+    name       = "ppx_here_expander",
+    manifest = [
+        ":Ppx_here_expander"
+    ],
+)
+
+######################## Modules & Signatures ########################
+ppx_module(
+    name          = "Ppx_here_expander",
+    struct        = "ppx_here_expander.ml",
+    sig           = ":Ppx_here_expander_cmi",
+    deps          = DEPS_1,
+    ppx_codeps    = ["//runtime-lib:ppx_here_lib"]
+)
+ocaml_signature(
+    name          = "Ppx_here_expander_cmi",
+    src           = "ppx_here_expander.mli",
+    deps          = DEPS_1,
+)
+
+

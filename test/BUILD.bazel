@@ -1,0 +1,67 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+
+load("@rules_ocaml//build:rules.bzl",
+     "ocaml_binary",
+     "ocaml_library",
+     "ocaml_ns_library",
+     "ocamllex",
+     "ocaml_exec_module",
+     "ocaml_module",
+     "ppx_executable",
+)
+
+PPX_ARGS = []
+##############################
+####  Executable Targets  ####
+ocaml_binary(
+    name     = "dummy.exe",
+    main     = ":Dummy",
+    visibility = ["//visibility:public"],
+)
+
+ocaml_exec_module(
+    name          = "Dummy",
+    struct        = "dummy.ml",
+    ppx           = ":ppx.exe",
+    ppx_args      = PPX_ARGS + []
+)
+
+######################## Modules & Signatures ########################
+########################
+####  File Generators  ####
+
+##########
+ocamllex(
+    name  = "lex_Dummy",
+    src   = "dummy.mll",
+    out   = "dummy.ml",
+)
+
+###############
+ppx_executable(
+    name    = "ppx.exe",
+    main    = "@ppxlib//lib/runner",
+    prologue = [
+        "//src:ppx_here"
+    ],
+)
+############################# Rules ##################################
+
+########
+# genrule(
+#     outs  = [
+#     ],
+#     name  = "dummy.ml.pp",
+#     srcs  = [
+#         ":dummy.ml.pp"
+#     ],
+#     cmd_bash   = " ".join([
+#         "$(execpath :FIXME1)",
+#         "$(SRCS);",
+#         "cp  $@",
+#     ]),
+#     tools   = [":FIXME1"]
+# )
+

@@ -1,0 +1,28 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_ocaml//build:rules.bzl",
+     "ocaml_library",
+     "ocaml_module",
+     "ocaml_signature",
+)
+
+############################# Aggregates #############################
+ocaml_library(
+    name       = "ppx_here_lib",
+    manifest = [
+        ":Ppx_here_lib"
+    ],
+)
+
+######################## Modules & Signatures ########################
+ocaml_module(
+    name          = "Ppx_here_lib",
+    struct        = "ppx_here_lib.ml",
+    sig           = ":Ppx_here_lib_cmi",
+)
+ocaml_signature(
+    name          = "Ppx_here_lib_cmi",
+    src           = "ppx_here_lib.mli",
+)
+
+
